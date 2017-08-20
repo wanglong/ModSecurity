@@ -137,6 +137,11 @@ int main(int argc, char **argv) {
         std::cout << test.header();
     }
 
+    std::cout << "Using resources:" << std::endl;
+    for (auto &i : resources) {
+        std::cout << " " << i;
+    }
+    std::cout << std::endl << std::endl;
     test.load_tests();
     if (test.target == default_test_path) {
         test.load_tests("test-cases/secrules-language-tests/transformations");
