@@ -76,6 +76,7 @@ void perform_unit_test(ModSecurityTest<UnitTest> *test, UnitTest *t,
         if (test->m_automake_output) {
             std::cout << "SKIP ";
         }
+        return;
     }
 
     if (t->type == "op") {
@@ -155,25 +156,30 @@ int main(int argc, char **argv) {
 
             if (!test.m_automake_output) {
                 int skp = 0;
-                if (r.size() == 0) {
-                    std::cout << KGRN << "0 tests failed.";
-                } else {
-                    for (auto &i : r) {
-                        if (i->skipped == true) {
-                            skp++;
-                        }
+                int fail = 0;
+                for (auto &i : r) {
+                    if (i->skipped == true) {
+                        skp++;
+                    } else {
+                        results.push_back(i);
+                        fail++;
                     }
-                    std::cout << KRED << r.size()-skp << " tests failed.";
                 }
+                if (fail > 0) {
+                    std::cout << KRED;
+                } else {
+                    std::cout << KGRN;
+                }
+
+                std::cout << fail << " tests failed.";
                 std::cout << RESET;
+
                 if (skp > 0) {
                     std::cout << " " << std::to_string(skp) << " ";
                     std::cout << "skipped.";
                 }
                 std::cout << std::endl;
             }
-
-            results.insert(results.end(), r.begin(), r.end());
         }
     }
 
