@@ -36,6 +36,7 @@ script:
   - make
   - make check
   - make check-static
+  - ./test/regression_tests test/test-cases/secrules-language-tests/operators/geoLookup.json
 
 
 
