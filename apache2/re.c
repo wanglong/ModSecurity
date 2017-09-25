@@ -1631,7 +1631,7 @@ static apr_status_t msre_ruleset_process_phase_(msre_ruleset *ruleset, modsec_re
             }
 
             /* Check if this rule was removed at runtime */
-        if (((rule->actionset->id !=NULL) && !apr_is_empty_array(msr->removed_rules)) ||
+        if (((rule->actionset && rule->actionset->id !=NULL) && !apr_is_empty_array(msr->removed_rules)) ||
                  (apr_is_empty_array(msr->removed_rules_tag)==0) || (apr_is_empty_array(msr->removed_rules_msg)==0)) {
             int j, act, rc;
             int do_process = 1;
@@ -1905,7 +1905,7 @@ static apr_status_t msre_ruleset_process_phase_(msre_ruleset *ruleset, modsec_re
                 apr_table_clear(msr->matched_vars);
                 return -1;
             } else  {
-                if (rule->actionset->is_chained) {
+                if (rule->actionset && rule->actionset->is_chained) {
                     /* If the current rule is part of a chain then
                      * we need to skip over all the rules in the chain.
                      */
@@ -2138,9 +2138,9 @@ static int msre_ruleset_phase_rule_remove_with_exception(msre_ruleset *ruleset, 
             if (remove_rule) {
                 /* Do not increment j. */
                 removed_count++;
-                if (rule->actionset->is_chained) mode = 2; /* Remove rules in this chain. */
+                if (rule->actionset && rule->actionset->is_chained) mode = 2; /* Remove rules in this chain. */
             } else {
-                if (rule->actionset->is_chained) mode = 1; /* Keep rules in this chain. */
+                if (rule->actionset && rule->actionset->is_chained) mode = 1; /* Keep rules in this chain. */
                 rules[j++] = rules[i];
             }
         } else { /* Handling rule that is part of a chain. */
